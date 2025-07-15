@@ -1,81 +1,73 @@
-const express = require('express');
-// 📦 Importamos la librería Express que instalamos con npm
-// Es como decir: "Voy a usar las herramientas de Express"
-
-const app = express();
-// 🏗️ Creamos nuestra aplicación web
-// 'app' es nuestro servidor, donde vamos a definir todas las rutas
-
-const PORT = 3000;
-// 🚪 Definimos el "puerto" donde va a escuchar nuestro servidor
-// Es como la "dirección" donde Flutter va a conectarse
-// Podría ser 3000, 8080, 5000... el que tú quieras
+const express = require('express');        // 📦 Importar Express
+const cors = require('cors');              // 🌐 Importar CORS
+const app = express();                     // 🏗️ Crear nuestra aplicación web
+const PORT = 3000;                         // 🚪 Puerto donde escucha el servidor
 
 // Importar la conexión a la base de datos
-const db = require('./database');
+const db = require('./database');          // 🗄️ Conexión a MySQL
+
+// 🔧 CONFIGURAR CORS: Permitir peticiones desde el navegador
+app.use(cors({
+    origin: '*',                           // 🌍 Permitir peticiones desde cualquier origen (desarrollo)
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // 📋 Métodos HTTP permitidos
+    allowedHeaders: ['Content-Type', 'Authorization'] // 📨 Headers permitidos
+}));
+
 // Middleware para parsear JSON
+app.use(express.json());                   // 🔧 Convertir datos recibidos a JSON automáticamente
 
-
-app.use(express.json());
-// 🔧 Le decimos a Express: "cuando recibas datos, conviértelos a JSON"
-// Flutter va a enviar datos en formato JSON, esto los convierte automáticamente
-
-// Ruta de prueba
+// 🛣️ RUTA DE PRUEBA: Verificar que la API funciona
 app.get('/', (req, res) => {
-    res.json({ mensaje: 'API del almacén funcionando!' });
+    res.json({ mensaje: 'API del almacén funcionando!' }); // 📨 Respuesta de prueba
 });
-// 🛣️ Definimos una "ruta" (endpoint)
-// app.get = cuando alguien haga una petición GET a "/"
-// (req, res) = req=petición que llega, res=respuesta que enviamos
-// res.json() = enviamos una respuesta en formato JSON
-// Ruta para obtener todos los productos
+
+// 🛣️ RUTA: Obtener todos los productos
 app.get('/productos', (req, res) => {
-    db.query('SELECT * FROM productos', (err, results) => {
-        if (err) {
+    db.query('SELECT * FROM productos', (err, results) => { // 🗄️ Consulta SQL
+        if (err) {                         // ❌ Si hay error en la base de datos
             console.log('Error en consulta:', err);
             res.status(500).json({ error: 'Error en la base de datos' });
-        } else {
-            res.json(results);
+        } else {                           // ✅ Si todo va bien
+            res.json(results);             // 📨 Enviar productos en formato JSON
         }
     });
 });
 
-// Ruta para obtener todos los albaranes
+// 🛣️ RUTA: Obtener todos los albaranes (ordenados por fecha, más reciente primero)
 app.get('/albaranes', (req, res) => {
-    db.query('SELECT * FROM albaranes ORDER BY fecha_creacion DESC', (err, results) => {
-        if (err) {
+    db.query('SELECT * FROM albaranes ORDER BY fecha_creacion DESC', (err, results) => { // 🗄️ Consulta SQL con orden
+        if (err) {                         // ❌ Si hay error en la base de datos
             console.log('Error en consulta albaranes:', err);
             res.status(500).json({ error: 'Error en la base de datos' });
-        } else {
-            res.json(results);
+        } else {                           // ✅ Si todo va bien
+            res.json(results);             // 📨 Enviar albaranes en formato JSON
         }
     });
 });
 
-
-// Ruta para crear un nuevo albarán
+// 🛣️ RUTA: Crear un nuevo albarán
 app.post('/albaranes', (req, res) => {
+    // 📥 Extraer datos del cuerpo de la petición (lo que envía Flutter)
     const { numero_albaran, cliente, direccion_entrega, observaciones } = req.body;
     
+    // 📝 Consulta SQL para insertar nuevo albarán
     const query = 'INSERT INTO albaranes (numero_albaran, cliente, direccion_entrega, observaciones) VALUES (?, ?, ?, ?)';
     
+    // 🗄️ Ejecutar la consulta con los datos
     db.query(query, [numero_albaran, cliente, direccion_entrega, observaciones], (err, results) => {
-        if (err) {
+        if (err) {                         // ❌ Si hay error al crear
             console.log('Error creando albarán:', err);
             res.status(500).json({ error: 'Error creando albarán' });
-        } else {
+        } else {                           // ✅ Si se creó correctamente
             res.json({ 
-                id: results.insertId, 
+                id: results.insertId,      // 🆔 ID del nuevo albarán creado
                 mensaje: 'Albarán creado correctamente' 
             });
         }
     });
 });
 
-// Iniciar servidor
+// 🚀 INICIAR SERVIDOR: Poner a escuchar en el puerto especificado
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`Servidor corriendo en http://localhost:${PORT}`); // 📢 Mensaje de confirmación
 });
-// 🚀 Ponemos el servidor "a escuchar" en el puerto 3000
-// La función () => {} se ejecuta cuando el servidor arranca
-// console.log() imprime un mensaje en la terminal
