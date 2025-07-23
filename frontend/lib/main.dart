@@ -1,25 +1,63 @@
-import 'package:flutter/material.dart';    // 🎨 Importar los widgets básicos de Flutter
-import 'screens/home_screen.dart';         // 📱 Importar nuestra pantalla principal
+import 'package:flutter/material.dart';
+import 'screens/auth_wrapper.dart'; // 🛡️ Wrapper de autenticación
 
-void main() {                              // 🚀 FUNCIÓN PRINCIPAL: Punto de entrada de la app
-  runApp(const MyApp());                   // ▶️ Ejecutar nuestra aplicación
+void main() {
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {      // 🏗️ CLASE: Configuración principal de la app
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {     // 🎨 FUNCIÓN: Construir la estructura principal
-    return MaterialApp(                    // 📱 App con diseño Material (estilo Android/Google)
-      title: 'Gestión Almacén',            // 🏷️ Nombre de la app (aparece en el navegador)
-      debugShowCheckedModeBanner: false,   // 🚫 Quitar el banner "DEBUG" de arriba
-      theme: ThemeData(                    // 🎨 CONFIGURACIÓN: Colores y estilos globales
-        colorScheme: ColorScheme.fromSeed( // 🌈 Esquema de colores basado en un color principal
-          seedColor: Colors.blue,          // 🔵 Color principal: azul
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Sistema Gestión Almacén MOLINCAR',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.light,
         ),
-        useMaterial3: true,                // ✨ Usar la versión más moderna de Material Design
+        useMaterial3: true,
+
+        // 🎨 PERSONALIZACIÓN: Estilos específicos
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          elevation: 2,
+        ),
+
+        cardTheme: CardThemeData(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 12,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+        ),
       ),
-      home: const HomeScreen(),            // 🏠 PANTALLA INICIAL: Nuestra pantalla de albaranes
+
+      // 🛡️ PANTALLA INICIAL: AuthWrapper (verifica autenticación)
+      home: const AuthWrapper(),
     );
   }
 }
