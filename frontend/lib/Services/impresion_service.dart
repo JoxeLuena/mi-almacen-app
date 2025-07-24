@@ -35,7 +35,9 @@ class ImpresionService {
     try {
       // 📊 OBTENER datos del backend
       final response = await http.get(
-        Uri.parse('http://192.168.1.207:3000/albaranes/$albaranId/imprimir'),
+        // Uri.parse('http://192.168.1.207:3000/albaranes/$albaranId/imprimir'), //desarrollo
+        Uri.parse(
+            'https://850766ec91e4.ngrok-free.app/albaranes/$albaranId/imprimir'), // NGROK
         headers: {'Content-Type': 'application/json'},
       );
 
@@ -540,7 +542,9 @@ class ImpresionService {
     try {
       // 📊 OBTENER datos del backend
       final response = await http.get(
-        Uri.parse('http://192.168.1.207:3000/albaranes/$albaranId/imprimir'),
+        // Uri.parse('http://192.168.1.207:3000/albaranes/$albaranId/imprimir'), // desarrollo
+        Uri.parse(
+            'https://850766ec91e4.ngrok-free.app/albaranes/$albaranId/imprimir'), // NGROK
         headers: {'Content-Type': 'application/json'},
       );
 

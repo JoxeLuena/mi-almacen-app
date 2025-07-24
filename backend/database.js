@@ -1,22 +1,30 @@
-const mysql = require('mysql2');
+const { Pool } = require('pg');
 
-// Configuración de la conexión
-const connection = mysql.createConnection({
-    host: '127.0.0.1',
-    port: 3306,
-    user: 'root',           // 👈 CAMBIO AQUÍ
-    password: 'Inpre2015',
-    database: 'almacen_app'
-});
-
-// Probar la conexión
-connection.connect((err) => {
-    if (err) {
-        console.log('❌ Error conectando a MySQL:', err);
-    } else {
-        console.log('✅ Conectado a MySQL correctamente');
+// 🔧 CONFIGURACIÓN DE CONEXIÓN POSTGRESQL SUPABASE
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
     }
 });
 
-// Exportar la conexión para usarla en otros archivos
-module.exports = connection;
+// 🔍 PROBAR LA CONEXIÓN AL INICIALIZAR
+pool.connect((err, client, release) => {
+    if (err) {
+        console.log('❌ Error conectando a PostgreSQL Supabase:', err.message);
+        console.log('🔧 Verifica la variable DATABASE_URL');
+    } else {
+        console.log('✅ Conectado a PostgreSQL Supabase correctamente');
+        console.log(`📊 Database: ${client.database}`);
+        console.log(`🏠 Host: ${client.host}`);
+        release();
+    }
+});
+
+// 🔄 MANEJAR ERRORES DE CONEXIÓN
+pool.on('error', (err) => {
+    console.log('❌ Error inesperado en PostgreSQL:', err);
+});
+
+// 📤 EXPORTAR EL POOL PARA USAR EN QUERIES
+module.exports = pool;

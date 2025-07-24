@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 
 // 📊 SERVICIO: Gestión de estados de albaranes
 class EstadosService {
-  static const String baseUrl = 'http://192.168.1.207:3000';
+  // static const String baseUrl = 'http://192.168.1.207:3000'; // desarrollo
+  static const String baseUrl = 'https://850766ec91e4.ngrok-free.app'; // NGOK
 
   // 📤 FUNCIÓN: Marcar albarán como enviado
   static Future<bool> marcarComoEnviado(int albaranId) async {

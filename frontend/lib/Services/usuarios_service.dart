@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 // 👥 SERVICIO: Gestión de usuarios y autenticación
 class UsuariosService {
   // 🌐 CONFIGURACIÓN: URL base del backend
-  static const String baseUrl = 'http://192.168.1.207:3000';
+  // static const String baseUrl = 'http://192.168.1.207:3000'; //desarrollo
+  static const String baseUrl = 'https://850766ec91e4.ngrok-free.app';
 
   // 🔑 ALMACENAMIENTO: Token de autenticación (en producción usar secure storage)
   static String? _token;

@@ -7,7 +7,8 @@ import '../config/app_config.dart';
 
 class ApiService {
   // 🏠 URL donde está corriendo nuestro backend Node.js
-  static const String baseUrl = 'http://localhost:3000';
+  // static const String baseUrl = 'http://localhost:3000';
+  static const String baseUrl = 'https://850766ec91e4.ngrok-free.app';
   //static const String baseUrl = AppConfig.baseUrl;
   // static const String baseUrl = 'http://192.168.1.207:3000';
   // 📖 FUNCIÓN: Obtener todos los albaranes desde la API
